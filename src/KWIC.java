@@ -7,22 +7,22 @@ import java.io.*;
 import java.util.*;
 
 public class KWIC {
-    private static ArrayList<String> inputLines = new ArrayList<String>();
-    private static HashMap<String, String> noiseWords = new HashMap<String, String>();
-    private static ArrayList<String> shiftedInputLines = new ArrayList<String>();
+    private static BufferedReader inputReader = new BufferedReader(new InputStreamReader(System.in));
 
     public static void main(String[] args) {
-        inputReader();
-        circularShift();
-        alphabeticalSort();
-        output();
+        ArrayList<String> lines = readLines();
+        HashMap<String, String> noiseWords = readNoiseWords();
+        ArrayList<String> shiftedLines = circularShift(lines, noiseWords);
+        ArrayList<String> alphabetizedLines = alphabeticalSort(shiftedLines);
+
+        output(alphabetizedLines);
     }
 
-    // Interactive Input
-    private static void inputReader() {
-        System.out.println("Please enter lines(enter z to indicate the end of input):");
+    // Read lines
+    private static ArrayList<String> readLines() {
+        ArrayList<String> inputLines = new ArrayList<String>();
 
-        BufferedReader inputReader = new BufferedReader(new InputStreamReader(System.in));
+        System.out.println("Please enter lines(enter z to indicate the end of input):");
 
         try {
             String line = inputReader.readLine();
@@ -34,6 +34,13 @@ public class KWIC {
         } catch (IOException error) {
             System.out.println(error.getMessage());
         }
+
+        return inputLines;
+    }
+
+    // Read noise words
+    private static HashMap<String, String> readNoiseWords() {
+        HashMap<String, String> noiseWords = new HashMap<String, String>();
 
         System.out.println("Please enter noise words to be ignored(enter z to indicate the end of input):");
 
@@ -47,10 +54,14 @@ public class KWIC {
         } catch (IOException error) {
             System.out.println(error.getMessage());
         }
+
+        return noiseWords;
     }
 
     // Circular Shift
-    private static void circularShift() {
+    private static ArrayList<String> circularShift(ArrayList<String> inputLines, HashMap<String, String> noiseWords) {
+        ArrayList<String> shiftedInputLines = new ArrayList<String>();
+
         for(int i = 0; i < inputLines.size(); i++) {
             String[] splitLine = inputLines.get(i).split("\\s+");
 
@@ -81,20 +92,26 @@ public class KWIC {
                 shiftedInputLines.add(shiftedLine);
             }
         }
+
+        return shiftedInputLines;
     }
 
     // Alphabetizer
-    private static void alphabeticalSort() {
-        Collections.sort(shiftedInputLines);
+    private static ArrayList<String> alphabeticalSort(ArrayList<String> shiftedInputLines) {
+        ArrayList<String> alphabetizedLines = shiftedInputLines;
+
+        Collections.sort(alphabetizedLines);
+
+        return alphabetizedLines;
     }
 
     // Output
-    private static void output() {
+    private static void output(ArrayList<String> alphabetizedLines) {
         System.out.println();
         System.out.println("Shifted Lines:");
 
-        for(int i = 0; i < shiftedInputLines.size(); i++) {
-            System.out.println(shiftedInputLines.get(i));
+        for(int i = 0; i < alphabetizedLines.size(); i++) {
+            System.out.println(alphabetizedLines.get(i));
         }
     }
 }

@@ -1,117 +1,58 @@
-import java.io.BufferedReader;
-
 /**
  * Created by WhyX on 11/8/16.
  */
-import java.io.*;
+import Subroutine.SubroutineWithSharedData;
+
 import java.util.*;
 
 public class KWIC {
-    private static BufferedReader inputReader = new BufferedReader(new InputStreamReader(System.in));
+    private static final String DEFAULT_INPUT_FILE_LOCATION = "input.txt";
+    private static final String DEFAULT_NOISE_WORDS_FILE_LOCATION = "noiseWords.txt";
+    public static Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) {
-        ArrayList<String> lines = readLines();
-        HashMap<String, String> noiseWords = readNoiseWords();
-        ArrayList<String> shiftedLines = circularShift(lines, noiseWords);
-        ArrayList<String> alphabetizedLines = alphabeticalSort(shiftedLines);
+        String inputFile = DEFAULT_INPUT_FILE_LOCATION;
+        String noiseWordsFile = DEFAULT_NOISE_WORDS_FILE_LOCATION;
+        String option;
 
-        output(alphabetizedLines);
-    }
+        System.out.println("====Welcome to KWIC====");
+        System.out.println("Default input file location: input.txt");
+        System.out.println("Default noise words file location: noiseWords.txt");
 
-    // Read lines
-    private static ArrayList<String> readLines() {
-        ArrayList<String> inputLines = new ArrayList<String>();
+        do {
+            System.out.println("Do you want to use the default input and noise words file location? (y/n)");
+            option = sc.next();
+        } while(!option.equals("y") && !option.equals("n"));
 
-        System.out.println("Please enter lines(enter z to indicate the end of input):");
+        if(option.equals("n")) {
+            System.out.println("Please enter your input file location:");
+            inputFile = sc.next();
 
-        try {
-            String line = inputReader.readLine();
-
-            while (!line.equalsIgnoreCase("z")) {
-                inputLines.add(line);
-                line = inputReader.readLine();
-            }
-        } catch (IOException error) {
-            System.out.println(error.getMessage());
+            System.out.println("Please enter your noise words file location:");
+            noiseWordsFile = sc.next();
         }
 
-        return inputLines;
-    }
+        System.out.println("Please choose one of the following Architectures(input 1 or 2):");
+        System.out.println("1. Subroutine with Shared Data - Cheong Yuan Xiang A0112162Y");
+        System.out.println("2. Abstract Data Types - Lareina Ting Jia Pei A0112151A");
+        System.out.println("Press any other key to exit.");
 
-    // Read noise words
-    private static HashMap<String, String> readNoiseWords() {
-        HashMap<String, String> noiseWords = new HashMap<String, String>();
+        while(true) {
+            option = sc.next();
 
-        System.out.println("Please enter noise words to be ignored(enter z to indicate the end of input):");
-
-        try {
-            String line = inputReader.readLine();
-
-            while (!line.equalsIgnoreCase("z")) {
-                noiseWords.put(line.toLowerCase(), line.toLowerCase());
-                line = inputReader.readLine();
+            switch(option) {
+                case "1":
+                    System.out.println("====Subroutine with Shared Data====");
+                    SubroutineWithSharedData subroutine = new SubroutineWithSharedData(inputFile, noiseWordsFile);
+                    subroutine.execute();
+                    break;
+                case "2":
+                    System.out.println("====Abstract Data Types====");
+                    break;
+                default:
+                    System.out.println("Program terminated, thank you!");
+                    System.exit(0);
             }
-        } catch (IOException error) {
-            System.out.println(error.getMessage());
-        }
-
-        return noiseWords;
-    }
-
-    // Circular Shift
-    private static ArrayList<String> circularShift(ArrayList<String> inputLines, HashMap<String, String> noiseWords) {
-        ArrayList<String> shiftedInputLines = new ArrayList<String>();
-
-        for(int i = 0; i < inputLines.size(); i++) {
-            String[] splitLine = inputLines.get(i).split("\\s+");
-
-            for(int j = 0; j < splitLine.length; j++) {
-
-                if(noiseWords.get(splitLine[j].toLowerCase()) != null) {
-                    continue;
-                }
-
-                int currIndex = j;
-                String shiftedLine = splitLine[j].concat(" ");
-
-                do {
-                    currIndex++;
-
-                    if(currIndex == splitLine.length) {
-                        currIndex %= splitLine.length;
-                    }
-
-                    if(currIndex == j) {
-                        break;
-                    }
-
-                    shiftedLine = shiftedLine.concat(splitLine[currIndex]);
-                    shiftedLine = shiftedLine.concat(" ");
-                } while (currIndex != j);
-
-                shiftedInputLines.add(shiftedLine);
-            }
-        }
-
-        return shiftedInputLines;
-    }
-
-    // Alphabetizer
-    private static ArrayList<String> alphabeticalSort(ArrayList<String> shiftedInputLines) {
-        ArrayList<String> alphabetizedLines = shiftedInputLines;
-
-        Collections.sort(alphabetizedLines);
-
-        return alphabetizedLines;
-    }
-
-    // Output
-    private static void output(ArrayList<String> alphabetizedLines) {
-        System.out.println();
-        System.out.println("Shifted Lines:");
-
-        for(int i = 0; i < alphabetizedLines.size(); i++) {
-            System.out.println(alphabetizedLines.get(i));
         }
     }
 }

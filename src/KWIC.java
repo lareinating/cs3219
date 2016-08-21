@@ -2,7 +2,9 @@
  * Created by WhyX on 11/8/16.
  */
 import Subroutine.SubroutineWithSharedData;
+import ADT.ADT;
 
+import java.io.IOException;
 import java.util.*;
 
 public class KWIC {
@@ -10,7 +12,7 @@ public class KWIC {
     private static final String DEFAULT_NOISE_WORDS_FILE_LOCATION = "noiseWords.txt";
     public static Scanner sc = new Scanner(System.in);
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         String inputFile = DEFAULT_INPUT_FILE_LOCATION;
         String noiseWordsFile = DEFAULT_NOISE_WORDS_FILE_LOCATION;
         String option;
@@ -48,6 +50,8 @@ public class KWIC {
                     break;
                 case "2":
                     System.out.println("====Abstract Data Types====");
+                    ADT adt = new ADT(inputFile, noiseWordsFile);
+                    adt.execute();
                     break;
                 default:
                     System.out.println("Program terminated, thank you!");

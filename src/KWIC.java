@@ -18,19 +18,19 @@ public class KWIC {
         String option;
 
         System.out.println("====Welcome to KWIC====");
-        System.out.println("Default input file location: input.txt");
-        System.out.println("Default noise words file location: noiseWords.txt");
+        System.out.println("Default input file name: input.txt");
+        System.out.println("Default noise words file name: noiseWords.txt");
 
         do {
-            System.out.println("Do you want to use the default input and noise words file location? (y/n)");
+            System.out.println("Do you want to use the default input and noise words file name? (y/n)");
             option = sc.next();
         } while(!option.equals("y") && !option.equals("n"));
 
         if(option.equals("n")) {
-            System.out.println("Please enter your input file location:");
+            System.out.println("Please enter your input file name:");
             inputFile = sc.next();
 
-            System.out.println("Please enter your noise words file location:");
+            System.out.println("Please enter your noise words file name:");
             noiseWordsFile = sc.next();
         }
 

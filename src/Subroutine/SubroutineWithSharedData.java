@@ -36,12 +36,13 @@ public class SubroutineWithSharedData {
 
             String line = br.readLine();
 
-            while(line != null) {
+            while (line != null) {
                 inputLines.add(line);
                 line = br.readLine();
             }
-        } catch(IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
+            System.out.println("Error reading input lines, please make sure the file does exist and the file name is correct.");
         }
 
         try {
@@ -49,16 +50,17 @@ public class SubroutineWithSharedData {
 
             String line = br.readLine();
 
-            while(line != null) {
+            while (line != null) {
                 noiseWords.put(line, line);
                 line = br.readLine();
             }
-        } catch(IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
+            System.out.println("Error reading noise words, please make sure the file does exist and the file name is correct.");
         } finally {
             try {
                 br.close();
-            } catch(IOException ex) {
+            } catch (IOException ex) {
                 ex.printStackTrace();
             }
         }
@@ -66,11 +68,11 @@ public class SubroutineWithSharedData {
 
     // Circular Shift
     private void circularShift() {
-        for(int i = 0; i < this.inputLines.size(); i++) {
+        for (int i = 0; i < this.inputLines.size(); i++) {
             String[] splitLine = this.inputLines.get(i).split("\\s+");
 
-            for(int j = 0; j < splitLine.length; j++) {
-                if(this.noiseWords.get(splitLine[j].toLowerCase()) != null) {
+            for (int j = 0; j < splitLine.length; j++) {
+                if (this.noiseWords.get(splitLine[j].toLowerCase()) != null) {
                     continue;
                 }
 
@@ -80,11 +82,11 @@ public class SubroutineWithSharedData {
                 do {
                     currIndex++;
 
-                    if(currIndex == splitLine.length) {
+                    if (currIndex == splitLine.length) {
                         currIndex %= splitLine.length;
                     }
 
-                    if(currIndex == j) {
+                    if (currIndex == j) {
                         break;
                     }
 
@@ -104,10 +106,28 @@ public class SubroutineWithSharedData {
 
     // Output
     private void output() {
+        BufferedWriter writer = null;
+
         System.out.println("Output:");
 
-        for(int i = 0; i < this.shiftedInputLines.size(); i++) {
-            System.out.println(this.shiftedInputLines.get(i));
+        try {
+            File outputFile = new File("output.txt");
+            writer = new BufferedWriter(new FileWriter(outputFile));
+            for (int i = 0; i < this.shiftedInputLines.size(); i++) {
+                writer.write(this.shiftedInputLines.get(i) + "\n");
+                System.out.println(this.shiftedInputLines.get(i));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Error writing to output file");
+        } finally {
+            if(writer != null) {
+                try {
+                    writer.close();
+                } catch (IOException ec) {
+                    ec.printStackTrace();
+                }
+            }
         }
     }
 }

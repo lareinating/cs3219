@@ -20,8 +20,7 @@ public class ADT {
         CircularShift cs = new InputCircularShift(fileInput.getStoredLines(), fileInput.getNoiseWords());
         AlphabeticShift as = new InputAlphabeticShift(cs.getCircularShiftedLines());
         as.alphaShift();
-        Output op = new OutputLines("output.txt");
-        op.storeToFile(as.getAlphaShiftedLines());
-        op.printLines(as.getAlphaShiftedLines());
+        Output op = new OutputLines("output.txt", as.getAlphaShiftedLines());
+        op.processOutput();
     }
 }

@@ -10,16 +10,19 @@ public class SubroutineWithSharedData {
     private BufferedReader br;
     private String inputFile;
     private String noiseWordsFile;
-    private ArrayList<String> inputLines;
-    private HashMap<String, String> noiseWords;
-    private ArrayList<String> shiftedInputLines;
 
+    // Shared Storage
+    private InputLineStorage inputLineStorage;
+    private NoiseWordStorage noiseWordStorage;
+    private ShiftedLineStorage shiftedInputLineStorage;
+
+    // Constructor
     public SubroutineWithSharedData(String inputFile, String noiseWordsFile) {
         this.inputFile = inputFile;
         this.noiseWordsFile = noiseWordsFile;
-        this.inputLines = new ArrayList<String>();
-        this.noiseWords = new HashMap<String, String>();
-        this.shiftedInputLines = new ArrayList<String>();
+        this.inputLineStorage = new InputLineStorage();
+        this.noiseWordStorage = new NoiseWordStorage();
+        this.shiftedInputLineStorage = new ShiftedLineStorage();
     }
 
     public void execute() {
@@ -37,7 +40,7 @@ public class SubroutineWithSharedData {
             String line = br.readLine();
 
             while (line != null) {
-                inputLines.add(line);
+                inputLineStorage.addLine(line);
                 line = br.readLine();
             }
         } catch (IOException e) {
@@ -51,7 +54,7 @@ public class SubroutineWithSharedData {
             String line = br.readLine();
 
             while (line != null) {
-                noiseWords.put(line, line);
+                noiseWordStorage.addNoiseWord(line);
                 line = br.readLine();
             }
         } catch (IOException e) {
@@ -68,11 +71,11 @@ public class SubroutineWithSharedData {
 
     // Circular Shift
     private void circularShift() {
-        for (int i = 0; i < this.inputLines.size(); i++) {
-            String[] splitLine = this.inputLines.get(i).split("\\s+");
+        for (int i = 0; i < this.inputLineStorage.getSize(); i++) {
+            String[] splitLine = this.inputLineStorage.getLine(i).split("\\s+");
 
             for (int j = 0; j < splitLine.length; j++) {
-                if (this.noiseWords.get(splitLine[j].toLowerCase()) != null) {
+                if(this.noiseWordStorage.checkOccurrence(splitLine[j])) {
                     continue;
                 }
 
@@ -94,28 +97,30 @@ public class SubroutineWithSharedData {
                     shiftedLine = shiftedLine.concat(" ");
                 } while (currIndex != j);
 
-                this.shiftedInputLines.add(shiftedLine);
+                this.shiftedInputLineStorage.addShiftedLine(shiftedLine);
             }
         }
     }
 
     // Alphabetizer
     private void alphabetizer() {
-        Collections.sort(this.shiftedInputLines);
+        Collections.sort(this.shiftedInputLineStorage.getAllShiftedLines());
     }
 
     // Output
     private void output() {
-        BufferedWriter writer = null;
+        writeToFile();
+        printToConsole();
+    }
 
-        System.out.println("Output:");
+    private void writeToFile() {
+        BufferedWriter writer = null;
 
         try {
             File outputFile = new File("output.txt");
             writer = new BufferedWriter(new FileWriter(outputFile));
-            for (int i = 0; i < this.shiftedInputLines.size(); i++) {
-                writer.write(this.shiftedInputLines.get(i) + "\n");
-                System.out.println(this.shiftedInputLines.get(i));
+            for (int i = 0; i < this.shiftedInputLineStorage.getSize(); i++) {
+                writer.write(this.shiftedInputLineStorage.getShiftedLine(i) + "\n");
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -128,6 +133,13 @@ public class SubroutineWithSharedData {
                     ec.printStackTrace();
                 }
             }
+        }
+    }
+
+    private void printToConsole() {
+        System.out.println("Output:");
+        for (int i = 0; i < this.shiftedInputLineStorage.getSize(); i++) {
+            System.out.println(this.shiftedInputLineStorage.getShiftedLine(i));
         }
     }
 }

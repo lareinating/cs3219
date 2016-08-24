@@ -14,7 +14,7 @@ public class SubroutineWithSharedData {
     // Shared Storage
     private InputLineStorage inputLineStorage;
     private NoiseWordStorage noiseWordStorage;
-    private ShiftedLineStorage shiftedInputLineStorage;
+    private ShiftedLineStorage shiftedLineStorage;
 
     // Constructor
     public SubroutineWithSharedData(String inputFile, String noiseWordsFile) {
@@ -22,7 +22,7 @@ public class SubroutineWithSharedData {
         this.noiseWordsFile = noiseWordsFile;
         this.inputLineStorage = new InputLineStorage();
         this.noiseWordStorage = new NoiseWordStorage();
-        this.shiftedInputLineStorage = new ShiftedLineStorage();
+        this.shiftedLineStorage = new ShiftedLineStorage();
     }
 
     public void execute() {
@@ -97,14 +97,14 @@ public class SubroutineWithSharedData {
                     shiftedLine = shiftedLine.concat(" ");
                 } while (currIndex != j);
 
-                this.shiftedInputLineStorage.addShiftedLine(shiftedLine);
+                this.shiftedLineStorage.addShiftedLine(shiftedLine);
             }
         }
     }
 
     // Alphabetizer
     private void alphabetizer() {
-        Collections.sort(this.shiftedInputLineStorage.getAllShiftedLines());
+        Collections.sort(this.shiftedLineStorage.getAllShiftedLines());
     }
 
     // Output
@@ -119,8 +119,8 @@ public class SubroutineWithSharedData {
         try {
             File outputFile = new File("output.txt");
             writer = new BufferedWriter(new FileWriter(outputFile));
-            for (int i = 0; i < this.shiftedInputLineStorage.getSize(); i++) {
-                writer.write(this.shiftedInputLineStorage.getShiftedLine(i) + "\n");
+            for (int i = 0; i < this.shiftedLineStorage.getSize(); i++) {
+                writer.write(this.shiftedLineStorage.getShiftedLine(i) + "\n");
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -138,8 +138,8 @@ public class SubroutineWithSharedData {
 
     private void printToConsole() {
         System.out.println("Output:");
-        for (int i = 0; i < this.shiftedInputLineStorage.getSize(); i++) {
-            System.out.println(this.shiftedInputLineStorage.getShiftedLine(i));
+        for (int i = 0; i < this.shiftedLineStorage.getSize(); i++) {
+            System.out.println(this.shiftedLineStorage.getShiftedLine(i));
         }
     }
 }

@@ -141,6 +141,9 @@ public class SubroutineWithSharedData {
         for (int i = 0; i < this.shiftedLineStorage.getSize(); i++) {
             System.out.println(this.shiftedLineStorage.getShiftedLine(i));
         }
+
+        System.out.println();
+        System.out.println("Your output can also be found in output.txt");
     }
 }
 

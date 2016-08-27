@@ -14,7 +14,7 @@ public class NoiseWordStorage {
     }
 
     public void addNoiseWord(String noiseWord) {
-        this.noiseWords.put(noiseWord, noiseWord);
+        this.noiseWords.put(noiseWord.toLowerCase(), noiseWord.toLowerCase());
     }
 
     public boolean checkOccurrence(String lineToCheck) {
